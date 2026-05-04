@@ -16,12 +16,13 @@ TRAPWINCH() {
 clear
 local width=$(tput cols)
 
-if (( width == 127 )); then
+if (( width == 191 )); then
   fastfetch
 elif (( width == 95 )); then
   ascii-image-converter "$HOME/img/ascii.png" -W 95 -C
-elif (( width == 191 )); then
-  ascii-image-converter "$HOME/img/ascii$(( RANDOM % 3 )).png" -W 191 -C
+elif (( width == 127 )); then
+  ascii-image-converter "$HOME/img/ascii$(( RANDOM % 3 )).png" -W 127 -C
+  #ascii-image-converter "$HOME/img/ascii$(( RANDOM % 3 )).png" -H 45 -C
 fi
 }
 
