@@ -1,0 +1,15 @@
+typeset -A aliases_maps=(                            
+[ls]='clear; eza --group-directories-first --icons'
+[la]='clear; eza -a --group-directories-first --icons'
+[lt]='clear; eza --group-directories-last --tree --level 2 --icons'
+[lta]='clear; eza -a --group-directories-last --tree --level 2 --icons'
+[n]='nvim'
+[t]='tmux'
+[dd]='../'
+[sshstart]='eval $(ssh-agent -s) && ssh-add ~/.ssh/id_ed25519'
+[ts]='ts-node'
+[u]='sudo pacman -Syu'
+[i]='sudo pacman -S'
+[r]='sudo pacman -Rns'
+)
+
