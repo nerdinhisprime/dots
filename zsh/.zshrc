@@ -1,5 +1,5 @@
 # Lines configured by zsh-newuser-install
-fastfetch
+ascii-image-converter "$HOME/img/ascii.png" -W 95 -C
 HISTFILE=~/.histfile
 HISTSIZE=1000
 SAVEHIST=1000
@@ -11,6 +11,19 @@ autoload -Uz compinit
 compinit
 
 source "$HOME/dots/aliases.list"
+
+TRAPWINCH() {
+clear
+local width=$(tput cols)
+
+if (( width == 127 )); then
+  fastfetch
+elif (( width == 95 )); then
+  ascii-image-converter "$HOME/img/ascii.png" -W 95 -C
+elif (( width == 191 )); then
+  ascii-image-converter "$HOME/img/ascii$(( RANDOM % 3 )).png" -W 191 -C
+fi
+}
 
 if [[ -d "/data/data/com.termux" ]]; then
   zsh_autosuggestions='~/.zsh_plugins/zsh-autosuggestions/zsh-autosuggestions.zsh'
