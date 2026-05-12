@@ -11,5 +11,6 @@ typeset -A aliases_maps=(
 [u]='sudo pacman -Syu'
 [i]='sudo pacman -S'
 [r]='sudo pacman -Rns'
+[z]='~/.local/bin/z/service.sh'
 )
 
