@@ -12,5 +12,6 @@ typeset -A aliases_maps=(
 [i]='sudo pacman -S'
 [r]='sudo pacman -Rns'
 [z]='~/.local/bin/z/service.sh'
+[kobold]='koboldcpp --model ~/dl/Mistral-Nemo-12B-ArliAI-RPMax-v1.1-Q4_K_M.gguf --usecublas --gpulayers 99 --contextsize 20284 --flashattention --threads 12'
 )
 
