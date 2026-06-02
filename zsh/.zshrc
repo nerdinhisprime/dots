@@ -1,5 +1,12 @@
 # Lines configured by zsh-newuser-install
-ascii-image-converter "$HOME/img/ascii.png" -W 95 -C
+if [ -f "/home/linuxbrew/.linuxbrew/bin/brew" ]; then
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
+
+if command -v ascii-image-converter &> /dev/null; then
+  ascii-image-converter "$HOME/img/ascii.png" -W 95 -C
+fi
+
 HISTFILE=~/.histfile
 HISTSIZE=1000
 SAVEHIST=1000
@@ -18,28 +25,30 @@ local width=$(tput cols)
 
 if (( width == 191 )); then
   fastfetch
-elif (( width == 95 )); then
+elif (( width == 95 )) && command -v ascii-image-converter &> /dev/null; then
   ascii-image-converter "$HOME/img/ascii.png" -W 95 -C
-elif (( width == 127 )); then
+elif (( width == 127 )) && command -v ascii-image-converter &> /dev/null; then
   ascii-image-converter "$HOME/img/ascii$(( RANDOM % 3 )).png" -W 127 -C
-  #ascii-image-converter "$HOME/img/ascii$(( RANDOM % 3 )).png" -H 45 -C
 fi
 }
 
 if [[ -d "/data/data/com.termux" ]]; then
-  zsh_autosuggestions='~/.zsh_plugins/zsh-autosuggestions/zsh-autosuggestions.zsh'
-  zsh_syntax_highlighting='~/.zsh_plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh'
+  zsh_autosuggestions="$HOME/.dotfiles/zsh/.zsh_plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
+  zsh_syntax_highlighting="$HOME/.dotfiles/zsh/.zsh_plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 
   aliases_maps[u]='pkg update -y && pkg upgrade -y'
   aliases_maps[i]='pkg install -y'
   aliases_maps[r]='pkg uninstall -y'
 elif [[ -f "/etc/arch-release" ]]; then
   zsh_autosuggestions='/usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh'
-  zsh_syntax_highlighing='/usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh'
+  zsh_syntax_highlighting='/usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh'
+else
+  zsh_autosuggestions="$HOME/.dotfiles/zsh/.zsh_plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
+  zsh_syntax_highlighting="$HOME/.dotfiles/zsh/.zsh_plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 fi
 
-source $zsh_autosuggestions
-source $zsh_syntax_highlighing
+[ -f "$zsh_autosuggestions" ] && source "$zsh_autosuggestions"
+[ -f "$zsh_syntax_highlighting" ] && source "$zsh_syntax_highlighting"
 
 zstyle ':vcs_info:git:*' formats ' (%b)'
 zstyle ':vcs_info:*' enable git
