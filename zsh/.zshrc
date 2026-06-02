@@ -10,7 +10,7 @@ bindkey -e
 autoload -Uz compinit
 compinit
 
-source "$HOME/dots/aliases.list"
+source "$HOME/.dotfiles/aliases.list"
 
 TRAPWINCH() {
 clear
