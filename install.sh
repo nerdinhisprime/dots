@@ -27,7 +27,7 @@ detect_host() {
 }
 
 install_zsh_plugins() {
-  PLUGINS_DIR="$HOME/.dotfiles/zsh-common/.zsh_plugins"
+  PLUGINS_DIR="$HOME/.dotfiles/zsh-core/.zsh_plugins"
   mkdir -p "$PLUGINS_DIR"
 
   if [ ! -d "$PLUGINS_DIR/zsh-autosuggestions" ]; then
