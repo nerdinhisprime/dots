@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 BASE_PKGS=(zsh git curl openssh neovim tmux zoxide fastfetch stow)
+BASE_SIMLINKS=(zsh-core user-dirs tmux)
 
 detect_host() {
   if [ -n "$TERMUX_VERSION" ] || [ -d "/data/data/com.termux" ]; then
@@ -26,7 +27,7 @@ detect_host() {
 }
 
 install_zsh_plugins() {
-  PLUGINS_DIR="$HOME/.dotfiles/zsh/.zsh_plugins"
+  PLUGINS_DIR="$HOME/.dotfiles/zsh-common/.zsh_plugins"
   mkdir -p "$PLUGINS_DIR"
 
   if [ ! -d "$PLUGINS_DIR/zsh-autosuggestions" ]; then
@@ -51,12 +52,14 @@ install_zsh_plugins() {
 
 detect_host
 
+cd "$HOME/.dotfiles" || exit 1
+
 case "$ENV" in
   "arch")
     sudo pacman -Syu --needed --noconfirm "${BASE_PKGS[@]}" niri foot ascii-image-converter
     install_zsh_plugins
+    stow "${BASE_SIMLINKS[@]}" zsh-desktop niri foot
     ;;
-    
   "wsl-ubuntu")
     sudo apt update && sudo apt upgrade -y && sudo apt install -y --no-install-recommends git curl build-essential
 
@@ -67,10 +70,12 @@ case "$ENV" in
 
     brew install "${BASE_PKGS[@]}"
     install_zsh_plugins
+    stow "${BASE_SIMLINKS[@]}"
     ;;
   "termux")
     pkg update -y && pkg upgrade -y && pkg install -y "${BASE_PKGS[@]}"
     install_zsh_plugins
+    stow "${BASE_SIMLINKS[@]}"
     ;;
   *)
     echo "иди к черту"
