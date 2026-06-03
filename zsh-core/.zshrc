@@ -33,9 +33,11 @@ elif (( width == 127 )) && command -v ascii-image-converter &> /dev/null; then
 fi
 }
 
+typeset -A aliases_maps
+
 if [[ -d "/data/data/com.termux" ]]; then
   zsh_autosuggestions="$HOME/.dotfiles/zsh-core/.zsh_plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
-  zsh_syntax_highlighting="$HOME/.dotfiles/zsh-core/.zsh_plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+  zsh_syntax_highlighting="$HOME/.dotfiles/zsh-core/.zsh_plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.plugin.zsh"
 
   aliases_maps[u]='pkg update -y && pkg upgrade -y'
   aliases_maps[i]='pkg install -y'
@@ -45,7 +47,7 @@ elif [[ -f "/etc/arch-release" ]]; then
   zsh_syntax_highlighting='/usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh'
 else
   zsh_autosuggestions="$HOME/.dotfiles/zsh-core/.zsh_plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
-  zsh_syntax_highlighting="$HOME/.dotfiles/zsh-core/.zsh_plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+  zsh_syntax_highlighting="$HOME/.dotfiles/zsh-core/.zsh_plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.plugin.zsh"
 fi
 
 [ -f "$zsh_autosuggestions" ] && source "$zsh_autosuggestions"
@@ -64,3 +66,4 @@ for k v in ${(kv)aliases_maps}; do
   alias $k="$v"
 done
 # End of lines added by compinstall
+
