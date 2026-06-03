@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-BASE_PKGS=(zsh git curl openssh neovim tmux zoxide fastfetch stow)
+BASE_PKGS=(zsh git curl openssh neovim tmux zoxide fastfetch stow eza)
 BASE_SIMLINKS=(zsh-core user-dirs tmux)
 
 detect_host() {
@@ -75,6 +75,7 @@ case "$ENV" in
   "termux")
     pkg update -y && pkg upgrade -y && pkg install -y "${BASE_PKGS[@]}"
     install_zsh_plugins
+    rm -f "$HOME/.zsh*" "$HOME/.tmux.conf"
     stow "${BASE_SIMLINKS[@]}"
     ;;
   *)
