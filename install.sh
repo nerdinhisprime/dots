@@ -35,6 +35,7 @@ install_zsh_plugins() {
     git clone https://github.com/zsh-users/zsh-autosuggestions $PREFIX/share/zsh-autosuggestions
     git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $PREFIX/share/zsh-syntax-highlighting
   fi
+  cd "$(dirname "$0")"
 }
 
 detect_host
@@ -46,7 +47,7 @@ case "$ENV" in
     sudo pacman -Syu --needed --noconfirm "${BASE_PKGS[@]}" "${ARCH_PKGS[@]}"
     mkdir -p ~/.local/share/fonts
     cd "$(dirname "$0")"
-    stow "${BASE_SIMLINKS[@]}" niri foot zsh-desktop assets
+    stow "${BASE_SIMLINKS[@]}" niri foot zsh-desktop fonts-desktop
     fc-cache -fv
 
     local tmp_yay="/tmp/yay-bin"
@@ -56,9 +57,14 @@ case "$ENV" in
     yay -S --noconfirm ungoogled-chromium-bin librewolf-bin
     ;;
   "termux")
+    termux-setup-storage
+    termux-change-repo
     pkg update -y && pkg upgrade -y && pkg install -y "${BASE_PKGS[@]}"
     install_zsh_plugins termux
-    stow "${BASE_SIMLINKS[@]}"
+    mkdir -p "$HOME/.termux"
+    stow "${BASE_SIMLINKS[@]}" fonts-termux
+
+    termux-reload-settings
     ;;
   "wsl-ubuntu")
     sudo apt update && sudo apt upgrade -y && sudo apt install -y --no-install-recommends "${UBUNTU_PKGS[@]}"
