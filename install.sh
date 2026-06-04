@@ -1,9 +1,16 @@
 #!/usr/bin/env bash
 
 BASE_PKGS=(zsh git curl openssh neovim tmux zoxide fastfetch stow eza)
+ARCH_PKGS=(bemenu niri foot zsh-autosuggestions zsh-syntax-highlighting)
+UBUNTU_PKGS=(git curl build-essential zsh-syntax-highlighting zsh-autosuggestions)
 BASE_SIMLINKS=(zsh-core user-dirs tmux)
 
 detect_host() {
+  if [ -f /etc/os-release ] && grep -qqi "id=arch" /etc/os-release; then
+    ENV="arch"
+    return
+  fi
+
   if [ -n "$TERMUX_VERSION" ] || [ -d "/data/data/com.termux" ]; then
     ENV="termux"
     return
@@ -17,36 +24,16 @@ detect_host() {
     fi
     return
   fi
-
-  if [ -f /etc/os-release ] && grep -qqi "id=arch" /etc/os-release; then
-    ENV="arch"
-    return
-  fi
-
   ENV="unknown"
 }
 
 install_zsh_plugins() {
-  PLUGINS_DIR="$HOME/.dotfiles/zsh-core/.zsh_plugins"
-  mkdir -p "$PLUGINS_DIR"
+  if [[ $1 == 'termux' ]]; then
+    mkdir -p $PREFIX/share/zsh-autosuggestions
+    mkdir -p $PREFIX/share/zsh-syntax-highlighting
 
-  if [ ! -d "$PLUGINS_DIR/zsh-autosuggestions" ]; then
-      git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions "$PLUGINS_DIR/zsh-autosuggestions"
-  fi
-
-  if [ ! -d "$PLUGINS_DIR/zsh-syntax-highlighting" ]; then
-      git clone --depth=1 https://github.com/zsh-users/zsh-syntax-highlighting "$PLUGINS_DIR/zsh-syntax-highlighting"
-  fi
-
-  ZSHRC="$HOME/.zshrc"
-  touch "$ZSHRC"
-
-  if ! grep -q "zsh-autosuggestions.zsh" "$ZSHRC"; then
-      echo "source $PLUGINS_DIR/zsh-autosuggestions/zsh-autosuggestions.zsh" >> "$ZSHRC"
-  fi
-
-  if ! grep -q "zsh-syntax-highlighting.zsh" "$ZSHRC"; then
-      echo "source $PLUGINS_DIR/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> "$ZSHRC"
+    git clone https://github.com/zsh-users/zsh-autosuggestions $PREFIX/share/zsh-autosuggestions
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $PREFIX/share/zsh-syntax-highlighting
   fi
 }
 
@@ -56,12 +43,16 @@ cd "$HOME/.dotfiles" || exit 1
 
 case "$ENV" in
   "arch")
-    sudo pacman -Syu --needed --noconfirm "${BASE_PKGS[@]}" niri foot ascii-image-converter
-    install_zsh_plugins
-    stow "${BASE_SIMLINKS[@]}" zsh-desktop niri foot
+    sudo pacman -Syu --needed --noconfirm "${BASE_PKGS[@]}" "${ARCH_PKGS[@]}"
+    stow "${BASE_SIMLINKS[@]}" niri foot
+    ;;
+  "termux")
+    pkg update -y && pkg upgrade -y && pkg install -y "${BASE_PKGS[@]}"
+    install_zsh_plugins termux
+    stow "${BASE_SIMLINKS[@]}"
     ;;
   "wsl-ubuntu")
-    sudo apt update && sudo apt upgrade -y && sudo apt install -y --no-install-recommends git curl build-essential
+    sudo apt update && sudo apt upgrade -y && sudo apt install -y --no-install-recommends "${UBUNTU_PKGS[@]}"
 
     if ! command -v brew &> /dev/null && [ ! -f /home/linuxbrew/.linuxbrew/bin/brew ]; then
         NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -69,13 +60,6 @@ case "$ENV" in
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
     brew install "${BASE_PKGS[@]}"
-    install_zsh_plugins
-    stow "${BASE_SIMLINKS[@]}"
-    ;;
-  "termux")
-    pkg update -y && pkg upgrade -y && pkg install -y "${BASE_PKGS[@]}"
-    install_zsh_plugins
-    rm -f "$HOME/.zsh*" "$HOME/.tmux.conf"
     stow "${BASE_SIMLINKS[@]}"
     ;;
   *)
@@ -83,4 +67,3 @@ case "$ENV" in
     exit 1
     ;;
 esac
-

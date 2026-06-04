@@ -353,7 +353,7 @@ binds {
 
     // Suggested binds for running programs: terminal, app launcher, screen locker.
     Mod+T hotkey-overlay-title="Open a Terminal: foot" { spawn "foot"; }
-    Mod+D hotkey-overlay-title="Run an Application: bemenu" { spawn "~/.local/bin/bemenu-run-custom.sh"; }
+    Mod+D hotkey-overlay-title="Run an Application: bemenu" { spawn "bemenu-run"; }
     // Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
 
     // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
