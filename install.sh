@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 BASE_PKGS=(zsh git curl openssh neovim tmux zoxide fastfetch stow eza)
-ARCH_PKGS=(bemenu niri foot zsh-autosuggestions zsh-syntax-highlighting)
+ARCH_PKGS=(bemenu niri foot yazi zsh-autosuggestions zsh-syntax-highlighting openh264)
 UBUNTU_PKGS=(git curl build-essential zsh-syntax-highlighting zsh-autosuggestions)
 BASE_SIMLINKS=(zsh-core user-dirs tmux)
 
@@ -44,7 +44,16 @@ cd "$HOME/.dotfiles" || exit 1
 case "$ENV" in
   "arch")
     sudo pacman -Syu --needed --noconfirm "${BASE_PKGS[@]}" "${ARCH_PKGS[@]}"
-    stow "${BASE_SIMLINKS[@]}" niri foot
+    mkdir -p ~/.local/share/fonts
+    cd "$(dirname "$0")"
+    stow "${BASE_SIMLINKS[@]}" niri foot zsh-desktop assets
+    fc-cache -fv
+
+    local tmp_yay="/tmp/yay-bin"
+    mkdir -p "$tmp_yay"
+    git clone https://aur.archlinux.org/yay-bin.git "$tmp_yay"
+    cd "$tmp_yay" && makepkg -si --noconfirm
+    yay -S --noconfirm ungoogled-chromium-bin librewolf-bin
     ;;
   "termux")
     pkg update -y && pkg upgrade -y && pkg install -y "${BASE_PKGS[@]}"
