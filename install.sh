@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 BASE_PKGS=(zsh git curl openssh neovim tmux zoxide fastfetch stow eza)
-ARCH_PKGS=(bemenu niri foot yazi zsh-autosuggestions zsh-syntax-highlighting openh264)
+ARCH_PKGS=(bemenu niri foot yazi zsh-autosuggestions zsh-syntax-highlighting openh264 docker docker-compose)
 UBUNTU_PKGS=(git curl build-essential zsh-syntax-highlighting zsh-autosuggestions)
 BASE_SIMLINKS=(zsh-core user-dirs tmux)
 
@@ -55,6 +55,19 @@ case "$ENV" in
     git clone https://aur.archlinux.org/yay-bin.git "$tmp_yay"
     cd "$tmp_yay" && makepkg -si --noconfirm
     yay -S --noconfirm ungoogled-chromium-bin librewolf-bin
+
+    sudo systemctl enable --now docker.service
+    
+    sudo usermod -aG docker "$USER"
+
+    local tmp_yay="/tmp/yay-bin"
+    mkdir -p "$tmp_yay"
+    git clone https://aur.archlinux.org/yay-bin.git "$tmp_yay"
+    cd "$tmp_yay" && makepkg -si --noconfirm
+    yay -S --noconfirm ungoogled-chromium-bin librewolf-bin
+
+    cd "$HOME/.dotfiles/vaultwarden/.config/vaultwarden" && sudo docker-compose up -d
+    cd "$HOME/.dotfiles/searxng/.config/searxng" && sudo docker-compose up -d
     ;;
   "termux")
     termux-setup-storage

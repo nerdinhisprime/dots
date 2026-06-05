@@ -1,0 +1,6 @@
+vaultwarden/.config/vaultwarden/vw-data/
+vaultwarden/.config/vaultwarden/caddy-data/
+vaultwarden/.config/vaultwarden/caddy-config/
+
+searxng/.config/searxng/caddy-data/
+searxng/.config/searxng/caddy-config/
