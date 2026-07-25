@@ -56,7 +56,7 @@ screenshot-path "~/img/screenshots/screenshot from %Y-%m-%d %H-%M-%S.png"
 binds {
     Mod+Shift+Slash { show-hotkey-overlay; }
 
-    Mod+T hotkey-overlay-title="Run a Terminal: alacritty" { spawn "alacritty"; }
+    Mod+T hotkey-overlay-title="Run a Terminal: foot" { spawn "foot"; }
     Mod+W hotkey-overlay-title="Run a Browser: chromium" { spawn "chromium"; }
     Super+Alt+S allow-when-locked=true hotkey-overlay-title=null { spawn-sh "pkill orca || exec orca"; }
     Mod+E hotkey-overlay-title="Run a File Manager: yazi" { spawn "foot" "-e" "yazi"; }

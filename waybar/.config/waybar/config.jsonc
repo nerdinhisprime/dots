@@ -51,7 +51,7 @@
   },
   "custom/cmd": {
     "format": "Cmd",
-    "on-click": "alacritty",
+    "on-click": "foot",
     "tooltip": false
   },
   "custom/go": {

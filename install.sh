@@ -1,97 +1,76 @@
 #!/usr/bin/env bash
 
 BASE_PKGS=(zsh git curl openssh neovim tmux zoxide fastfetch stow eza)
-ARCH_PKGS=(bemenu niri foot alacritty pcmanfm yazi zsh-autosuggestions zsh-syntax-highlighting openh264 docker docker-compose sway-launcher-desktop waybar cliphist fzf)
-UBUNTU_PKGS=(git curl build-essential zsh-syntax-highlighting zsh-autosuggestions)
-BASE_SIMLINKS=(zsh-core user-dirs tmux)
+ARCH_PKGS=(bemenu niri foot alacritty pcmanfm yazi zsh-autosuggestions zsh-syntax-highlighting openh264 docker docker-compose waybar cliphist fzf awww)
+FONT_PKGS=(noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra ttf-dejavu ttf-liberation)
+SIMLINKS=(zsh-core user-dirs tmux niri alacritty waybar mako bin fonts)
 
-detect_host() {
-  if [ -f /etc/os-release ] && grep -qqi "id=arch" /etc/os-release; then
-    ENV="arch"
-    return
-  fi
+C_RESET="\033[0m"
+C_BOLD="\033[1m"
+C_RED="\033[1;31m"
+C_GREEN="\033[1;32m"
+C_YELLOW="\033[1;33m"
+C_BLUE="\033[1;34m"
+C_MAGENTA="\033[1;35m"
+C_CYAN="\033[1;36m"
 
-  if [ -n "$TERMUX_VERSION" ] || [ -d "/data/data/com.termux" ]; then
-    ENV="termux"
-    return
-  fi
-
-  if grep -qqi "microsoft" /proc/version || grep -qqi "wsl" /proc/version; then
-    if grep -qqi "ubuntu" /etc/os-release; then
-      ENV="wsl-ubuntu"
-    else
-      ENV="wsl-generic"
-    fi
-    return
-  fi
-  ENV="unknown"
+print_info() {
+    echo -e "${C_CYAN}==>${C_RESET} ${C_BOLD}$1${C_RESET}"
 }
 
-install_zsh_plugins() {
-  if [[ $1 == 'termux' ]]; then
-    mkdir -p $PREFIX/share/zsh-autosuggestions
-    mkdir -p $PREFIX/share/zsh-syntax-highlighting
-
-    git clone https://github.com/zsh-users/zsh-autosuggestions $PREFIX/share/zsh-autosuggestions
-    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $PREFIX/share/zsh-syntax-highlighting
-  fi
-  cd "$(dirname "$0")"
+print_success() {
+    echo -e "${C_GREEN}==>${C_RESET} ${C_BOLD}$1${C_RESET}"
 }
 
-detect_host
+print_error() {
+    echo -e "${C_RED}==>${C_RESET} ${C_BOLD}$1${C_RESET}"
+}
 
-cd "$HOME/.dotfiles" || exit 1
 
-case "$ENV" in
-  "arch")
-    sudo pacman -Syu --needed --noconfirm "${BASE_PKGS[@]}" "${ARCH_PKGS[@]}"
-    mkdir -p ~/.local/share/fonts
-    cd "$(dirname "$0")"
-    stow "${BASE_SIMLINKS[@]}" niri foot zsh-desktop fonts-desktop
-    fc-cache -fv
-
-    local tmp_yay="/tmp/yay-bin"
-    mkdir -p "$tmp_yay"
-    git clone https://aur.archlinux.org/yay-bin.git "$tmp_yay"
-    cd "$tmp_yay" && makepkg -si --noconfirm
-    yay -S --noconfirm ungoogled-chromium-bin librewolf-bin
-
-    sudo systemctl enable --now docker.service
-    
-    sudo usermod -aG docker "$USER"
-
-    local tmp_yay="/tmp/yay-bin"
-    mkdir -p "$tmp_yay"
-    git clone https://aur.archlinux.org/yay-bin.git "$tmp_yay"
-    cd "$tmp_yay" && makepkg -si --noconfirm
-    yay -S --noconfirm ungoogled-chromium-bin librewolf-bin
-
-    cd "$HOME/.dotfiles/vaultwarden/.config/vaultwarden" && sudo docker-compose up -d
-    cd "$HOME/.dotfiles/searxng/.config/searxng" && sudo docker-compose up -d
-    ;;
-  "termux")
-    termux-setup-storage
-    termux-change-repo
-    pkg update -y && pkg upgrade -y && pkg install -y "${BASE_PKGS[@]}"
-    install_zsh_plugins termux
-    mkdir -p "$HOME/.termux"
-    stow "${BASE_SIMLINKS[@]}" fonts-termux
-
-    termux-reload-settings
-    ;;
-  "wsl-ubuntu")
-    sudo apt update && sudo apt upgrade -y && sudo apt install -y --no-install-recommends "${UBUNTU_PKGS[@]}"
-
-    if ! command -v brew &> /dev/null && [ ! -f /home/linuxbrew/.linuxbrew/bin/brew ]; then
-        NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    fi
-    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-
-    brew install "${BASE_PKGS[@]}"
-    stow "${BASE_SIMLINKS[@]}"
-    ;;
-  *)
-    echo "иди к черту"
+DOTFILES_DIR="$HOME/.dotfiles"
+if [ ! -d "$DOTFILES_DIR" ]; then
+    print_error "Directory .dotfiles wasn't found: $DOTFILES_DIR"
     exit 1
-    ;;
-esac
+fi
+
+cd "$DOTFILES_DIR" || exit 1
+
+print_info "Updating and installing packages..."
+sudo pacman -Syu --needed --noconfirm "${BASE_PKGS[@]}" "${ARCH_PKGS[@]}" "${FONT_PKGS[@]}"
+
+
+print_info "Creating directories and creating simlinks with stow..."
+mkdir -p ~/.local/share/fonts
+mkdir -p ~/.local/bin
+stow "${SIMLINKS[@]}"
+
+print_info "Getting permissions for scripts from ~/.local/bin..."
+chmod +x ~/.local/bin/* 2>/dev/null || true
+
+print_info "Update fonts cache..."
+fc-cache -fv
+
+print_info "Set wallpaper..."
+awww-daemon &
+# sleep 1
+awww img "$DOTFILES_DIR/img/ascii/ascii.png"
+
+print_info "Installing yay и AUR-packages..."
+TMP_YAY="/tmp/yay-bin"
+rm -rf "$TMP_YAY"
+git clone https://aur.archlinux.org/yay-bin.git "$TMP_YAY"
+cd "$TMP_YAY" && makepkg -si --noconfirm
+cd "$DOTFILES_DIR"
+
+yay -S --noconfirm ungoogled-chromium-bin librewolf-bin
+
+print_info "Docker setup..."
+sudo systemctl enable --now docker.service
+sudo usermod -aG docker "$USER"
+
+print_info "Set zsh as a default shell..."
+if [ "$SHELL" != "$(which zsh)" ]; then
+    chsh -s "$(which zsh)"
+fi
+
+print_success "Installing and configuration completed successfully!"

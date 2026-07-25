@@ -1,10 +1,6 @@
 # Lines configured by zsh-newuser-install
-if [ -f "/home/linuxbrew/.linuxbrew/bin/brew" ]; then
-  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-fi
-
 if command -v ascii-image-converter &> /dev/null; then
-  ascii-image-converter "$HOME/img/ascii.png" -W 95 -C
+  ascii-image-converter "$HOME/.dotfiles/img/ascii/ascii.png" -W 110 -C
 fi
 
 HISTFILE=~/.histfile
@@ -19,35 +15,11 @@ compinit
 
 source "$HOME/.dotfiles/aliases.list"
 
-TRAPWINCH() {
-clear
-local width=$(tput cols)
-
-if (( width == 191 )); then
-  fastfetch
-elif (( width == 95 )) && command -v ascii-image-converter &> /dev/null; then
-  ascii-image-converter "$HOME/img/ascii.png" -W 95 -C
-elif (( width == 127 )) && command -v ascii-image-converter &> /dev/null; then
-  ascii-image-converter "$HOME/img/ascii$(( RANDOM % 3 )).png" -W 127 -C
-fi
-}
 
 typeset -A aliases_maps
 
-if [[ -f "/etc/arch-release" ]]; then
-  zsh_autosuggestions='/usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh'
-  zsh_syntax_highlighting='/usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh'
-elif [[ -d "/data/data/com.termux" ]]; then
-  zsh_autosuggestions="$PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
-  zsh_syntax_highlighting="$PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
-
-  aliases_maps[u]='pkg update -y && pkg upgrade -y'
-  aliases_maps[i]='pkg install -y'
-  aliases_maps[r]='pkg uninstall -y'
-else
-  zsh_autosuggestions="/usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
-  zsh_syntax_highlighting="/usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
-fi
+zsh_autosuggestions='/usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh'
+zsh_syntax_highlighting='/usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh'
 
 [ -f "$zsh_autosuggestions" ] && source "$zsh_autosuggestions"
 [ -f "$zsh_syntax_highlighting" ] && source "$zsh_syntax_highlighting"
@@ -65,4 +37,3 @@ for k v in ${(kv)aliases_maps}; do
   alias $k="$v"
 done
 # End of lines added by compinstall
-

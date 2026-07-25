@@ -1,17 +1,15 @@
-typeset -A aliases_maps=(                            
+typeset -A aliases_maps=(
 [ls]='clear; eza --group-directories-first --icons'
 [la]='clear; eza -a --group-directories-first --icons'
 [lt]='clear; eza --group-directories-last --tree --level 2 --icons'
 [lta]='clear; eza -a --group-directories-last --tree --level 2 --icons'
 [n]='nvim'
 [t]='tmux'
+[y]='yazi'
 [dd]='../'
 [sshstart]='eval $(ssh-agent -s) && ssh-add ~/.ssh/id_ed25519'
 [ts]='ts-node'
 [u]='sudo pacman -Syu'
 [i]='sudo pacman -S'
 [r]='sudo pacman -Rns'
-[z]='~/.local/bin/z/service.sh'
-[kobold]='koboldcpp --model ~/dl/Mistral-Nemo-12B-ArliAI-RPMax-v1.1-Q4_K_M.gguf --usecublas --gpulayers 99 --contextsize 20284 --flashattention --threads 12'
 )
-

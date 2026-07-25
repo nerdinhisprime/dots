@@ -1,5 +1,19 @@
 #!/usr/bin/env bash
 
+for cmd in cliphist fzf chafa wl-copy; do
+    if ! command -v "$cmd" &> /dev/null; then
+        echo "Error: Required command '$cmd' is not found."
+        read -p "Do you want to install missing dependencies (cliphist, fzf, chafa, wl-clipboard)? [y/N] " -n 1 -r
+        echo
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+            sudo pacman -S --noconfirm cliphist fzf chafa wl-clipboard
+        else
+            exit 1
+        fi
+        break
+    fi
+done
+
 PIDFILE="/tmp/niri-buffer-menu.pid"
 
 if [ -f "$PIDFILE" ]; then

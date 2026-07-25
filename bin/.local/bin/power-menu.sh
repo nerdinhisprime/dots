@@ -1,4 +1,19 @@
 #!/usr/bin/env bash
+
+for cmd in fzf; do
+    if ! command -v "$cmd" &> /dev/null; then
+        echo "Error: Required command '$cmd' is not found."
+        read -p "Do you want to install missing dependencies fzf? [y/N] " -n 1 -r
+        echo
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+            sudo pacman -S --noconfirm fzf
+        else
+            exit 1
+        fi
+        break
+    fi
+done
+
 PIDFILE="/tmp/niri-power-menu.pid"
 
 if [ -f "$PIDFILE" ]; then
@@ -9,7 +24,7 @@ if [ -f "$PIDFILE" ]; then
 fi
 
 echo $$ > "$PIDFILE"
-chosen=$(printf "  poweroff\n  reboot\n󰍃  kill niri" | fzf --prompt="power: " --height=20% --layout=reverse)
+chosen=$(printf " poweroff\n reboot\n󰍃 kill niri" | fzf --prompt="power: " --height=20% --layout=reverse)
 
 case "$chosen" in
     *"poweroff"*)
