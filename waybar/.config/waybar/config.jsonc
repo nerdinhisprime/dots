@@ -1,0 +1,179 @@
+{
+  "layer": "top",
+  "position": "top",
+  "height": 28,
+  "spacing": 0,
+  "modules-left": [
+    "custom/arch",
+    "niri/window",
+    "custom/file",
+    "custom/edit",
+    "custom/cmd",
+    "custom/process",
+    "custom/go",
+    "custom/web",
+    "custom/help"
+  ],
+  "modules-center": [],
+  "modules-right": [
+    "tray",
+    "bluetooth",
+    "network",
+    "pulseaudio",
+    "battery",
+    "custom/spotlight",
+    "custom/controlcenter",
+    "backlight",
+    "clock"
+  ],
+  "custom/arch": {
+    "format": "  ",
+    "on-click": "foot --app-id=powermenu -e ~/.local/bin/power-menu.sh",
+    "tooltip": false
+  },
+  "niri/window": {
+    "format": "{}",
+    "max-length": 30,
+    "rewrite": {
+      "": "undefined"
+    }
+  },
+  "custom/file": {
+    "format": "File",
+    "on-click": "foot -e yazi",
+    "on-click-right": "pcmanfm",
+    "tooltip": false
+  },
+  "custom/edit": {
+    "format": "Edit",
+    "on-click": "foot -e nvim",
+    "tooltip": false
+  },
+  "custom/cmd": {
+    "format": "Cmd",
+    "on-click": "alacritty",
+    "tooltip": false
+  },
+  "custom/go": {
+    "format": "Go",
+    "on-click": "foot --app-id=launcher -e sway-launcher-desktop",
+    "tooltip": false
+  },
+  "custom/web": {
+    "format": "Web",
+    "on-click": "chromium",
+    "tooltip": false
+  },
+  "custom/process": {
+    "format": "Process",
+    "on-click": "foot -e btop",
+    "tooltip": false
+  },
+  "custom/help": {
+    "format": "Help",
+    "on-click": "niri msg action show-hotkey-overlay",
+    "tooltip": false
+  },
+  "bluetooth": {
+    "format": "󰂯",
+    "format-disabled": "󰂲",
+    "format-connected": "󰂱",
+    "tooltip-format": "󰂯 Bluetooth: {status}",
+    "tooltip-format-disabled": "󰂲 Bluetooth выключен",
+    "tooltip-format-connected": "󰂱 Подключено устройств: {num_connections}\n\n{device_enumerate}",
+    "tooltip-format-enumerate-connected": "  • {device_alias} ({device_address})",
+    "tooltip-format-enumerate-connected-battery": "  • {device_alias}\t󰥉 {device_battery_percentage}%",
+    "on-click": "foot -e bluetui",
+    "on-click-right": "rfkill toggle bluetooth"
+  },
+  "network": {
+    "format-wifi": "{icon}",
+    "format-icons": [
+      "󰤯",
+      "󰤟",
+      "󰤢",
+      "󰤥",
+      "󰤨"
+    ],
+    "format-ethernet": "󰈀",
+    "format-disconnected": "󰤮",
+    "tooltip-format": "SSID: {essid}\nIP: {ipaddr}\nЧастота: {frequency}GHz\nСигнал: {signalStrength}% ({signaldBm} dBm)",
+    "on-click": "foot -e impala"
+  },
+  "pulseaudio": {
+    "format": "{icon}",
+    "format-bluetooth": "{icon}",
+    "format-muted": "󰝟",
+    "format-source": "󰍬 {volume}%",
+    "format-source-muted": "󰍭 Выкл",
+    "format-icons": {
+      "headphone": "",
+      "hands-free": "󰋎",
+      "headset": "󰋎",
+      "headphone-bluetooth": "󰋋",
+      "headset-bluetooth": "󰥰",
+      "phone": "",
+      "portable": "",
+      "default": [
+        "󰕿",
+        "󰖀",
+        "󰕾"
+      ]
+    },
+    "scroll-step": 5,
+    "on-click": "foot -e pulsemixer",
+    "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+    "on-click-middle": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
+    "tooltip": true,
+    "tooltip-format": "Output:\n  Устройство: {desc}\n  Громкость: {volume}%\n\nInput:\n  Устройство: {source_desc}\n  Состояние: {format_source}"
+  },
+  "battery": {
+    "states": {
+      "warning": 30,
+      "critical": 15
+    },
+    "format": "{icon}",
+    "format-charging": "󰂄",
+    //"format-plugged": "󰚥",
+    "format-plugged": "",
+    "format-icons": [
+      "󰂎",
+      "󰁺",
+      "󰁻",
+      "󰁼",
+      "󰁽",
+      "󰁾",
+      "󰁿",
+      "󰂀",
+      "󰂁",
+      "󰂂",
+      "󰁹"
+    ],
+    "tooltip": true,
+    "tooltip-format": "Заряд: {capacity}%\nОсталось: {time}\nПотребление: {power:0.1f}W",
+    "tooltip-format-charging": "Зарядка: {capacity}%\nДо полной: {time}",
+    "tooltip-format-plugged": "Подключено к сети (Заряжено)"
+  },
+  "backlight": {
+    "format": "{icon} ",
+    "format-icons": [
+      "󰃝",
+      "󰃞",
+      "󰃟",
+      "󰃠"
+    ],
+    "scroll-step": 5,
+    "tooltip": true,
+    "tooltip-format": "☀️ Яркость: {percent}%",
+    "on-click": "pkill wlsunset || wlsunset -t 4000",
+    "on-click-right": "brightnessctl set 10%"
+  },
+  "clock": {
+    "format": "{:%a %d %b  %H:%M}",
+    "tooltip": false
+  },
+  "tray": {
+    "icon-size": 16,
+    "spacing": 10
+  }
+}

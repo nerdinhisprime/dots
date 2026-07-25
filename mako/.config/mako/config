@@ -1,0 +1,19 @@
+font=Comic Sans MS 13
+
+background-color=#1e1e1e
+text-color=#ffffff
+
+border-size=0
+border-radius=0
+
+width=350
+height=110
+padding=12
+max-history=100
+
+on-button-left=exec foot --app-id=notifications -e ~/.local/bin/notification-menu.sh
+[urgency=high]
+background-color=#301e1e
+text-color=#ffffff
+border-size=1
+border-color=#f7768e

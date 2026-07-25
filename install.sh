@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 BASE_PKGS=(zsh git curl openssh neovim tmux zoxide fastfetch stow eza)
-ARCH_PKGS=(bemenu niri foot yazi zsh-autosuggestions zsh-syntax-highlighting openh264 docker docker-compose)
+ARCH_PKGS=(bemenu niri foot alacritty pcmanfm yazi zsh-autosuggestions zsh-syntax-highlighting openh264 docker docker-compose sway-launcher-desktop waybar cliphist fzf)
 UBUNTU_PKGS=(git curl build-essential zsh-syntax-highlighting zsh-autosuggestions)
 BASE_SIMLINKS=(zsh-core user-dirs tmux)
 

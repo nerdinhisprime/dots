@@ -15,6 +15,8 @@ export SDL_VIDEODRIVER='wayland,x11'
 #export XCURSOR_SIZE='24'
 export _JAVA_AWT_WM_NONREPARENTING='1'
 export GTK_CSD=0
+export XDG_CURRENT_DESKTOP=niri
+export XDG_SESSION_TYPE=wayland
 
 ### --- [ Desktop & Theme ] ---
 export GTK_THEME='Adwaita:dark'
