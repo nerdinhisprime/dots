@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 BASE_PKGS=(zsh git curl openssh neovim tmux zoxide fastfetch stow eza)
-ARCH_PKGS=(bemenu niri foot alacritty pcmanfm yazi zsh-autosuggestions zsh-syntax-highlighting openh264 docker docker-compose waybar cliphist fzf awww)
+ARCH_PKGS=(bemenu niri foot alacritty pcmanfm yazi zsh-autosuggestions zsh-syntax-highlighting openh264 docker docker-compose waybar cliphist fzf awww bluetui impala pulsemixer brightnessctl btop)
 FONT_PKGS=(noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra ttf-dejavu ttf-liberation)
 SIMLINKS=(zsh-core user-dirs tmux niri alacritty waybar mako bin fonts)
 
@@ -42,7 +42,9 @@ sudo pacman -Syu --needed --noconfirm "${BASE_PKGS[@]}" "${ARCH_PKGS[@]}" "${FON
 print_info "Creating directories and creating simlinks with stow..."
 mkdir -p ~/.local/share/fonts
 mkdir -p ~/.local/bin
+mkdir -p ~/.config
 stow "${SIMLINKS[@]}"
+git clone https://github.com/nerdinhisprime/nvim "$HOME/.config"
 
 print_info "Getting permissions for scripts from ~/.local/bin..."
 chmod +x ~/.local/bin/* 2>/dev/null || true
