@@ -15,3 +15,6 @@ if [[ "$(tty)" == "/dev/tty1" ]]; then
     exec niri
   fi
 fi
+
+# Created by `pipx` on 2026-07-27 11:07:07
+export PATH="$PATH:/home/nerd/.local/bin"

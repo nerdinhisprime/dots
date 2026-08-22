@@ -37,3 +37,6 @@ for k v in ${(kv)aliases_maps}; do
   alias $k="$v"
 done
 # End of lines added by compinstall
+
+# Created by `pipx` on 2026-07-27 11:07:07
+export PATH="$PATH:/home/nerd/.local/bin"

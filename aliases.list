@@ -12,4 +12,6 @@ typeset -A aliases_maps=(
 [u]='sudo pacman -Syu'
 [i]='sudo pacman -S'
 [r]='sudo pacman -Rns'
+[tr]='tar -cvf'
+[trgz]='tar --exclude-from='$HOME/.dotfiles/excludelist.txt' -czvf'
 )

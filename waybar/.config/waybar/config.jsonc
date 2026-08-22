@@ -83,7 +83,7 @@
     "tooltip-format-connected": "󰂱 Подключено устройств: {num_connections}\n\n{device_enumerate}",
     "tooltip-format-enumerate-connected": "  • {device_alias} ({device_address})",
     "tooltip-format-enumerate-connected-battery": "  • {device_alias}\t󰥉 {device_battery_percentage}%",
-    "on-click": "foot -e bluetui",
+    "on-click": "~/.local/bin/bluetooth-menu.sh",
     "on-click-right": "rfkill toggle bluetooth"
   },
   "network": {
@@ -98,7 +98,7 @@
     "format-ethernet": "󰈀",
     "format-disconnected": "󰤮",
     "tooltip-format": "SSID: {essid}\nIP: {ipaddr}\nЧастота: {frequency}GHz\nСигнал: {signalStrength}% ({signaldBm} dBm)",
-    "on-click": "foot -e impala"
+    "on-click": "~/.local/bin/wifi-menu.sh"
   },
   "pulseaudio": {
     "format": "{icon}",

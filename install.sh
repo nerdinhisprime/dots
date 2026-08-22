@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 BASE_PKGS=(zsh git curl openssh neovim tmux zoxide fastfetch stow eza)
-ARCH_PKGS=(bemenu niri foot alacritty pcmanfm yazi zsh-autosuggestions zsh-syntax-highlighting openh264 docker docker-compose waybar cliphist fzf awww bluetui impala pulsemixer brightnessctl btop)
+ARCH_PKGS=(bemenu niri foot alacritty pcmanfm yazi zsh-autosuggestions zsh-syntax-highlighting openh264 docker docker-compose waybar cliphist fzf awww bluetui impala pulsemixer brightnessctl btop iwd dnscrypt-proxy bluez bluez-utils pipewire pipewire-pulse pipewire-alsa wireplumber)
 FONT_PKGS=(noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra ttf-dejavu ttf-liberation)
 SIMLINKS=(zsh-core user-dirs tmux niri alacritty waybar mako bin fonts)
 
@@ -36,18 +36,20 @@ fi
 cd "$DOTFILES_DIR" || exit 1
 
 print_info "Updating and installing packages..."
-sudo pacman -Syu --needed --noconfirm "${BASE_PKGS[@]}" "${ARCH_PKGS[@]}" "${FONT_PKGS[@]}"
+sudo pacman -Syu --needed --noconfirm "${BASE_PKGS[@]}" "${ARCH_PKGS[@]}" "${FONT_PKGS[@]}" gvfs gvfs-mtp libmtp android-udev
 
 
 print_info "Creating directories and creating simlinks with stow..."
 mkdir -p ~/.local/share/fonts
 mkdir -p ~/.local/bin
-mkdir -p ~/.config
+mkdir -p ~/.config/nvim
 stow "${SIMLINKS[@]}"
-git clone https://github.com/nerdinhisprime/nvim "$HOME/.config"
+git clone https://github.com/nerdinhisprime/nvim "$HOME/.config/nvim"
 
 print_info "Getting permissions for scripts from ~/.local/bin..."
 chmod +x ~/.local/bin/* 2>/dev/null || true
+sudo usermod -aG network $USER
+
 
 print_info "Update fonts cache..."
 fc-cache -fv
@@ -75,4 +77,10 @@ if [ "$SHELL" != "$(which zsh)" ]; then
     chsh -s "$(which zsh)"
 fi
 
+sudo systemctl enable --now bluetooth.service
 print_success "Installing and configuration completed successfully!"
+
+
+
+# pacman -S linux-zen-headers nvidia-dkms nvidia-utils lib32-nvidia-utils
+# yay -S powertop
